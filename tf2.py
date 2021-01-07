@@ -50,3 +50,5 @@ for n in range(n_loop):
 
 print('elapsed time for {} prediction {} [msec]'.format(
     len(x_test), (time.perf_counter()-start) * 1000 / n_loop))
+
+print()
