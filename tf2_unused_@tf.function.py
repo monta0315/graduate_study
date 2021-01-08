@@ -11,7 +11,8 @@ import numpy as np
 #params
 imageDim = 784
 outputDim = 10
-f_model="tf2_unused_@tf.function"
+f_model = "tf2_unused_@tf.function"
+checkpoint_path = "mycheckpoint/cp.ckpt"
 
 #データセッティング
 mnist = tf.keras.datasets.mnist
@@ -38,12 +39,20 @@ optim = tf.keras.optimizers.Adam()
 #モデルをコンパイルする
 model.compile(optimizer=optim, loss=loss, metrics=[acc])
 
-model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=5, batch_size=128)
+# チェックポイントコールバックを作る
+cp_callback = tf.keras.callbacks.ModelCheckpoint(
+    checkpoint_path, save_weights_only=True, verbose=1)
+
+#チェックポイント保存ディレクトリを作成する
+checkpoint_dir = os.path.dirname(checkpoint_path)
+
+#モデルを学習させる
+model.fit(x_train, y_train, validation_data=(x_test, y_test),
+          epochs=5, batch_size=128, callbacks=[cp_callback])
 
 if not os.path.isdir(f_model):
   os.makedirs(f_model)
-  model.save(f_model+'/my_model')
-
+  model.save('my_model/' + f_model)
 
 #訓練データ作成
 trainset = tf.data.Dataset.from_tensor_slices((x_train, y_train))
