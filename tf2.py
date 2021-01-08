@@ -15,8 +15,8 @@ mnist = tf.keras.datasets.mnist
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
 #データ加工
-x_train = x_train.astype(np.float32).reshape(-1, 784) / 255.0
-x_test = x_test.astype(np.float32).reshape(-1, 784) / 255.0
+x_train = x_train.astype(np.float32).reshape(x_train.shape[0], 784) / 255.0
+x_test = x_test.astype(np.float32).reshape(x_test.shape[0], 784) / 255.0
 
 #モデル作成関数、一応、predictとtrainingの際にデータを渡しても問題ないっぽい？？
 def create_model():
@@ -35,20 +35,22 @@ optim = tf.keras.optimizers.Adam()
 #モデルをコンパイルする
 model.compile(optimizer=optim, loss=loss, metrics=[acc])
 
-model.fit(x_train,y_train, validation_data=(x_test,y_test),epochs=5,batch_size=128)
+model.fit(x_train,y_train, validation_data=(x_test,y_test),epochs=1,batch_size=128)
 
 #テストデータ作成
-test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test))
-test_ds = test_ds.batch(128)
+test_ds = tf.data.Dataset.from_tensor_slices(x_test)
+#test_ds = test_ds.batch(128)
 
 
 n_loop = 5
 start=time.perf_counter()
 for n in range(n_loop):
-  for step,(x) in enumerate(x_test):
-    pred = model(np.array([x]))
+  for x in x_test:
+    model(np.array([x]))
 
 print('elapsed time for {} prediction {} [msec]'.format(
     len(x_test), (time.perf_counter()-start) * 1000 / n_loop))
 
-print()
+model_int = model.get_concrete_function(
+
+)
