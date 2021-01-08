@@ -6,9 +6,12 @@ from tensorflow.keras import Model
 import tensorflow.keras.layers as layers
 import numpy as np
 
+#tf2.0なのに@tf.functionを使用していないので死ぬほど時間かかります
+
 #params
 imageDim = 784
-outputDim=10
+outputDim = 10
+f_model="tf2_unused_@tf.function"
 
 #データセッティング
 mnist = tf.keras.datasets.mnist
@@ -35,20 +38,32 @@ optim = tf.keras.optimizers.Adam()
 #モデルをコンパイルする
 model.compile(optimizer=optim, loss=loss, metrics=[acc])
 
-model.fit(x_train,y_train, validation_data=(x_test,y_test),epochs=5,batch_size=128)
+model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=5, batch_size=128)
+
+if not os.path.isdir(f_model):
+  os.makedirs(f_model)
+  model.save(f_model+'/my_model')
+
+
+#訓練データ作成
+trainset = tf.data.Dataset.from_tensor_slices((x_train, y_train))
+tf.print(trainset)
+trainset = trainset.shuffle(buffer_size=1024).batch(128)
+tf.print(trainset)
 
 #テストデータ作成
 test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test))
 test_ds = test_ds.batch(128)
 
-
-n_loop = 5
+""" @tf.function
+def test_step(x):
+  model(np.array([x]))
+ """
+n_loop = 1
 start=time.perf_counter()
 for n in range(n_loop):
-  for step,(x) in enumerate(x_test):
-    pred = model(np.array([x]))
+  for x in x_test:
+    model.predict(np.array([x]),batch_size=128,verbose=1)
 
 print('elapsed time for {} prediction {} [msec]'.format(
     len(x_test), (time.perf_counter()-start) * 1000 / n_loop))
-
-print()

@@ -36,6 +36,8 @@ def main():
         acc.update_state(y, pred)  # 評価関数に結果を足していく
         return loss_val
 
+
+
     # train
     for i in range(5):
         acc.reset_states()  # 評価関数の集積をリセット
