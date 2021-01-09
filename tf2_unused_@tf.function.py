@@ -52,7 +52,7 @@ model.fit(x_train, y_train, validation_data=(x_test, y_test),
 
 if not os.path.isdir(f_model):
   os.makedirs(f_model)
-  model.save('my_model/' + f_model)
+  model.save('my_model.h5')
 
 #訓練データ作成
 trainset = tf.data.Dataset.from_tensor_slices((x_train, y_train))
