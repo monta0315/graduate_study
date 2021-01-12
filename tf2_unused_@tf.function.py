@@ -72,7 +72,7 @@ n_loop = 1
 start=time.perf_counter()
 for n in range(n_loop):
   for x in x_test:
-    model.predict(np.array([x]),batch_size=128,verbose=1)
+    model.predict(np.array([x]))
 
 print('elapsed time for {} prediction {} [msec]'.format(
     len(x_test), (time.perf_counter()-start) * 1000 / n_loop))
