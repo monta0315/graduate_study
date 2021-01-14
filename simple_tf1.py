@@ -47,11 +47,7 @@ with tf.compat.v1.Session() as sess:
     start = time.perf_counter()
     print(
         "accuracy : ",
-        sess.run(
-              accuracy,
-              feed_dict={x: mnist.test.images, y_: mnist.test.labels}
-          )
-        )
+        sess.run(accuracy,feed_dict={x: mnist.test.images, y_: mnist.test.labels}))
     print('elapsed time {} [msec]'.format(
          (time.perf_counter()-start) * 1000))
 
