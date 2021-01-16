@@ -59,6 +59,8 @@ test_step_int = test_step.get_concrete_function(
     tf.TensorSpec(shape=(None, 784), dtype=tf.float64)
 )
 
+#print(test_step_int.function_def)
+
 start = time.perf_counter()
 n_loop = 5
 num = 0

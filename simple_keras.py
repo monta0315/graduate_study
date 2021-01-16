@@ -63,6 +63,8 @@ model.fit(x_train, Y_train,  epochs=5, verbose=1)
 start = time.perf_counter()
 n_loop = 5
 for n in range(n_loop):
-        [model.predict(np.array([x])) for x in x_test]
+        for x in x_test:
+                model.predict(np.array([x]))
+
 print('elapsed time for {} prediction {} [msec]'.format(
         len(x_test), (time.perf_counter()-start) * 1000 / n_loop))
