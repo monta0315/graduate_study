@@ -24,6 +24,9 @@ x_train, x_test = x_train / 255., x_test / 255.
 #@tf.function内の関数にデータを渡す際に加工しなければならなかったため。batch(1)はつけないとエラー出る
 test_ds = tf.data.Dataset.from_tensor_slices((x_test)).batch(1)
 
+#test_dsの型を確認数
+tf.print(test_ds)
+
 #modelを定義
 model = tf.keras.models.Sequential([
     tf.keras.layers.InputLayer(input_shape=(784,)),
@@ -44,17 +47,25 @@ model.fit(x_train, y_train, epochs=3, verbose=1,
           validation_data=(x_test, y_test))
 
 #テスト関数
+
+
 @tf.function
 def test_step(x):
   model(x)
+
+
+#test_stepのグラフ化により高速化
+test_step_int = test_step.get_concrete_function(
+    tf.TensorSpec(shape=(None, 784), dtype=tf.float64)
+)
 
 start = time.perf_counter()
 n_loop = 5
 num = 0
 for n in range(n_loop):
     for x in test_ds:
-        test_step(x)
-        num+=1
+        test_step_int(x)
+        num += 1
 print('-' * 30)
 print('elapsed time for {} prediction {} [msec]'.format(
     num / n_loop, (time.perf_counter() - start) * 1000 / n_loop))
