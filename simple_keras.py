@@ -47,7 +47,8 @@ Y_test = np_utils.to_categorical(y_test, nb_classes)
 #モデル定義
 model = Sequential()
 model.add(InputLayer(input_shape=(784,)))
-model.add(Dense(10 ,activation='softmax'))
+model.add(Dense(10))
+model.add(Activation('softmax'))
 model.summary()
 
 #モデルのコンパイル
