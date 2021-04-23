@@ -4,6 +4,7 @@ import time
 from tensorflow.keras.layers import Dense, Flatten, Conv2D
 from tensorflow.keras import Model
 import numpy as np
+from keras.utils import plot_model
 
 #tf2.0なのに@tf.functionを使用していないので死ぬほど時間かかります
 
@@ -25,6 +26,8 @@ model = tf.keras.models.Sequential([
 ])
 
 model.summary()
+
+
 #各種パラメータを宣言
 loss = tf.keras.losses.SparseCategoricalCrossentropy()
 #モデルをコンパイルする
@@ -33,6 +36,11 @@ model.compile(optimizer='adam', loss=loss, metrics=['accuracy'])
 
 #モデルを学習させる
 model.fit(x_train, y_train,epochs=5)
+
+#モデルの精度
+score = model.evaluate(x_test, y_test, verbose=0)
+print('score:', score[0])
+print('accuracy:', score[1])
 
 #推論時間の測定
 n_loop = 5

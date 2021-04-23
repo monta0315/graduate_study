@@ -11,6 +11,7 @@ import keras.backend.tensorflow_backend as KTF
 from keras import backend as K
 import argparse
 import os
+from keras.utils import plot_model
 
 #config setting
 batch_size = 128
@@ -51,6 +52,8 @@ model.add(Dense(10))
 model.add(Activation('softmax'))
 model.summary()
 
+plot_model(model, to_file='model.png')
+
 #モデルのコンパイル
 model.compile(optimizer=SGD(lr=0.5),
               loss='categorical_crossentropy',
@@ -59,6 +62,11 @@ model.compile(optimizer=SGD(lr=0.5),
 
 #モデルの訓練
 model.fit(x_train, Y_train,  epochs=5, verbose=1)
+
+#モデルの精度
+score = model.evaluate(x_test, Y_test, verbose=0)
+print('score:', score[0])
+print('accuracy:', score[1])
 
 #推論の時間測定
 start = time.perf_counter()

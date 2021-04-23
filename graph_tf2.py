@@ -30,8 +30,9 @@ tf.print(test_ds)
 #modelを定義
 model = tf.keras.models.Sequential([
     tf.keras.layers.InputLayer(input_shape=(784,)),
-    tf.keras.layers.Dense(10, activation='softmax')
-], name='Sequential')
+    tf.keras.layers.Dense(10),
+    tf.keras.layers.Activation('softmax')
+])
 
 model.summary()
 
@@ -60,6 +61,11 @@ test_step_int = test_step.get_concrete_function(
 )
 
 #print(test_step_int.function_def)
+
+#モデルの精度
+score = model.evaluate(x_test, y_test, verbose=0)
+print('score:', score[0])
+print('accuracy:', score[1])
 
 start = time.perf_counter()
 n_loop = 5

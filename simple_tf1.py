@@ -8,13 +8,11 @@ outputDim = 10
 
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
 # None means that a dimension can be any of any length
+
+#モデル作成
 x = tf.compat.v1.placeholder(tf.float32, [None, imageDim], name="input")
-# 784-dimensional image vectors by it to produce 10-dimensional vectors
-W = tf.Variable(tf.zeros([imageDim, outputDim]),
-                dtype=tf.float32, name="Weight")
-# a shape of [10]
-b = tf.Variable(tf.zeros([outputDim]), dtype=tf.float32, name="bias")
-# softmax
+W = tf.Variable(tf.zeros([imageDim, outputDim]),dtype=tf.float32)
+b = tf.Variable(tf.zeros([outputDim]), dtype=tf.float32)
 y = tf.nn.softmax(tf.matmul(x, W)+b, name="softmax")
 # print(x, W, b, y)
 

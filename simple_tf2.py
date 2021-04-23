@@ -21,14 +21,15 @@ x_test = x_test.reshape(x_test.shape[0], imageDim)
 x_train, x_test = x_train / 255., x_test / 255.
 #print(x_train.shape, x_test.shape, t_train.shape, t_test.shape)
 
-#@tf.function内の関数にデータを渡す際に加工しなければならなかったため。batch(1)はつけないとエラー出る
+#@tf.function内の関数にデータを渡す際に加工しなければならなかったため
 test_ds = tf.data.Dataset.from_tensor_slices((x_test)).batch(1)
 
 #modelを定義
 model = tf.keras.models.Sequential([
     tf.keras.layers.InputLayer(input_shape=(784,)),
-    tf.keras.layers.Dense(10, activation='softmax')
-], name='Sequential')
+    tf.keras.layers.Dense(10),
+    tf.keras.layers.Activation('softmax')
+])
 
 model.summary()
 
@@ -47,6 +48,12 @@ model.fit(x_train, y_train, epochs=3, verbose=1,
 @tf.function
 def test_step(x):
   model(x)
+
+
+#モデルの精度
+score = model.evaluate(x_test, y_test, verbose=0)
+print('score:', score[0])
+print('accuracy:', score[1])
 
 start = time.perf_counter()
 n_loop = 5

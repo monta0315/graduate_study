@@ -37,7 +37,7 @@ cross_entropy = tf.reduce_mean(
 train_step = tf.compat.v1.train.GradientDescentOptimizer(
     0.5).minimize(cross_entropy)
 
-#変数を保存、復元するために。。。
+#変数を保存、復元する目的で
 saver = tf.train.Saver()
 
 
